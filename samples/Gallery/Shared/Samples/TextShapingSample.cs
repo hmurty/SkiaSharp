@@ -1,5 +1,4 @@
-﻿#if !HAS_UNO
-using SkiaSharp;
+﻿using SkiaSharp;
 using SkiaSharp.HarfBuzz;
 
 namespace SkiaSharpSample.Samples
@@ -20,22 +19,23 @@ namespace SkiaSharpSample.Samples
 		{
 			canvas.DrawColor(SKColors.White);
 
-			using (var tf = SKFontManager.Default.MatchCharacter('م'))
-			using (var paint = new SKPaint { IsAntialias = true, TextSize = 64 })
-			using (var arabicPaint = new SKPaint { IsAntialias = true, TextSize = 64, Typeface = tf })
-			{
-				// unshaped
-				canvas.DrawText("Unshaped:", 100, 100, paint);
-				canvas.DrawText("مرحبا بالعالم", 100, 180, arabicPaint);
+#if __WASM__
+			using var tf = SKTypeface.FromStream(SampleMedia.Fonts.ShapingFont);
+#else
+			using var tf = SKFontManager.Default.MatchCharacter('م');
+#endif
+			using var paint = new SKPaint { IsAntialias = true, TextSize = 64 };
+			using var arabicPaint = new SKPaint { IsAntialias = true, TextSize = 64, Typeface = tf };
 
-				// shaped
-				using (var shaper = new SKShaper(tf))
-				{
-					canvas.DrawText("Shaped:", 100, 300, paint);
-					canvas.DrawShapedText(shaper, "مرحبا بالعالم", 100, 380, arabicPaint);
-				}
-			}
+			// unshaped
+			canvas.DrawText("Unshaped:", 100, 100, paint);
+			canvas.DrawText("مرحبا بالعالم", 100, 180, arabicPaint);
+
+			using var shaper = new SKShaper(tf);
+
+			// shaped
+			canvas.DrawText("Shaped:", 100, 300, paint);
+			canvas.DrawShapedText(shaper, "مرحبا بالعالم", 100, 380, arabicPaint);
 		}
 	}
 }
-#endif

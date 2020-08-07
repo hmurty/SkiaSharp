@@ -32,6 +32,8 @@ namespace SkiaSharpSample
 		{
 			public static Stream EmbeddedFont => Embedded.Load("embedded-font.ttf");
 
+			public static Stream ShapingFont => Embedded.Load("shaping-font.ttf");
+
 			public static string ContentFontPath = string.Empty;
 		}
 

@@ -16,9 +16,12 @@ namespace SkiaSharpSample
 {
 	public sealed partial class MainPage : Page
 	{
+		private const int TextOverlayPadding = 8;
+
 		private CancellationTokenSource cancellations;
 		private IList<SampleBase> samples;
 		private SampleBase sample;
+		private SKPaint textPaint;
 
 		public MainPage()
 		{
@@ -33,6 +36,12 @@ namespace SkiaSharpSample
 			listView.ItemsSource = samples;
 
 			SetSample(samples.First(s => s.Category.HasFlag(SampleCategories.Showcases)));
+
+			textPaint = new SKPaint
+			{
+				TextSize = 16,
+				IsAntialias = true
+			};
 		}
 
 		protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -125,11 +134,17 @@ namespace SkiaSharpSample
 		private void OnPaintCanvas(object sender, SKPaintSurfaceEventArgs e)
 		{
 			OnPaintSurface(e.Surface.Canvas, e.Info.Width, e.Info.Height);
+
+			var view = sender as SKXamlCanvas;
+			DrawOverlayText(view, e.Surface.Canvas, view.CanvasSize, SampleBackends.OpenGL);
 		}
 
 		private void OnPaintGL(object sender, SKPaintGLSurfaceEventArgs e)
 		{
 			OnPaintSurface(e.Surface.Canvas, e.BackendRenderTarget.Width, e.BackendRenderTarget.Height);
+
+			var view = sender as SKSwapChainPanel;
+			DrawOverlayText(view, e.Surface.Canvas, view.CanvasSize, SampleBackends.OpenGL);
 		}
 
 		private void SetSample(SampleBase newSample)
@@ -184,6 +199,36 @@ namespace SkiaSharpSample
 		private void OnSampleTapped(object sender, TappedRoutedEventArgs e)
 		{
 			sample?.Tap();
+		}
+
+		private void DrawOverlayText(FrameworkElement view, SKCanvas canvas, SKSize canvasSize, SampleBackends backend)
+		{
+			// make sure no previous transforms still apply
+			canvas.ResetMatrix();
+
+			// get and apply the current scale
+			var scale = canvasSize.Width / (float)view.ActualWidth;
+			canvas.Scale(scale);
+
+			var y = (float)view.ActualHeight - TextOverlayPadding;
+
+			var text = $"Current scaling = {scale:0.0}x";
+			canvas.DrawText(text, TextOverlayPadding, y, textPaint);
+
+			y -= textPaint.TextSize + TextOverlayPadding;
+
+			text = "SkiaSharp: " + SamplesManager.SkiaSharpVersion;
+			canvas.DrawText(text, TextOverlayPadding, y, textPaint);
+
+			y -= textPaint.TextSize + TextOverlayPadding;
+
+			text = "HarfBuzzSharp: " + SamplesManager.HarfBuzzSharpVersion;
+			canvas.DrawText(text, TextOverlayPadding, y, textPaint);
+
+			y -= textPaint.TextSize + TextOverlayPadding;
+
+			text = "Backend: " + backend;
+			canvas.DrawText(text, TextOverlayPadding, y, textPaint);
 		}
 	}
 }

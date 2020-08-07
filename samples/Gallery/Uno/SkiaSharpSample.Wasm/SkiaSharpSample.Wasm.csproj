@@ -30,12 +30,16 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\binding\SkiaSharp\SkiaSharp.csproj" />
+    <ProjectReference Include="..\..\..\..\source\SkiaSharp.HarfBuzz\SkiaSharp.HarfBuzz\SkiaSharp.HarfBuzz.csproj" />
     <ProjectReference Include="..\..\..\..\source\SkiaSharp.Views.Uno\SkiaSharp.Views.Uno.Wasm\SkiaSharp.Views.Uno.Wasm.csproj" />
+    <ProjectReference Include="..\..\..\..\binding\HarfBuzzSharp\HarfBuzzSharp.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\**\*" />
     <EmbeddedResource Include="WasmCSS\*.css" />
     <EmbeddedResource Include="WasmScripts\*.js" />
+    <None Remove="libHarfBuzzSharp.a" />
+    <Content Include="libHarfBuzzSharp.a" />
     <LinkerDescriptor Include="LinkerConfig.xml" />
   </ItemGroup>
   <Import Project="..\..\..\..\output\SkiaSharp.Views.Uno\nuget\build\netstandard2.0\SkiaSharp.Views.Uno.targets" Condition="Exists('..\..\..\..\output\SkiaSharp.Views.Uno\nuget\build\netstandard2.0\SkiaSharp.Views.Uno.targets')" />

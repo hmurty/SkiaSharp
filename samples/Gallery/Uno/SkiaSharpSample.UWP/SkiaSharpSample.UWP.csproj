@@ -122,9 +122,17 @@
     <PackageReference Include="Uno.Core" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\binding\HarfBuzzSharp.UWP\HarfBuzzSharp.UWP.csproj">
+      <Project>{99b3f882-bd26-4982-8c9f-f89042425a5f}</Project>
+      <Name>HarfBuzzSharp.UWP</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\binding\SkiaSharp.UWP\SkiaSharp.UWP.csproj">
       <Project>{bab615aa-956e-4079-b260-dd7b1f52ec7d}</Project>
       <Name>SkiaSharp.UWP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\source\SkiaSharp.HarfBuzz\SkiaSharp.HarfBuzz\SkiaSharp.HarfBuzz.csproj">
+      <Project>{0ac96386-2881-48e7-ad6b-161226d4023c}</Project>
+      <Name>SkiaSharp.HarfBuzz</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\source\SkiaSharp.Views\SkiaSharp.Views.UWP\SkiaSharp.Views.UWP.csproj">
       <Project>{8bb20362-91a2-4206-944d-634070eac6f3}</Project>
